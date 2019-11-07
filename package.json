@@ -1,0 +1,8 @@
+{
+  "name": "todo-express-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Will Ley",
+  "license": "MIT",
+  "private": false
+}

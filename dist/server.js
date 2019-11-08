@@ -8,11 +8,21 @@ const express_1 = __importDefault(require("express"));
 const utils_1 = require("./utils");
 const middleware_1 = __importDefault(require("./middleware"));
 const services_1 = __importDefault(require("./services"));
+const errorHandlers_1 = __importDefault(require("./middleware/errorHandlers"));
+process.on("uncaughtException", e => {
+    console.log(e);
+    process.exit(1);
+});
+process.on("unhandledRejection", e => {
+    console.log(e);
+    process.exit(1);
+});
 //create the router 'app' in other models I've seen
 const router = express_1.default();
 //apply the middle ware like cors auth etc to the application
 utils_1.applyMiddleware(middleware_1.default, router);
 utils_1.applyRoutes(services_1.default, router);
+utils_1.applyMiddleware(errorHandlers_1.default, router);
 const { PORT = 3000 } = process.env;
 const server = http_1.default.createServer(router);
 server.listen(PORT, () => console.log(`Server is running: http://localhost:${PORT}...`));

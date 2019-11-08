@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 
 export default[
     {
-        path: "/",
+        path: "/user",
         method: "get",
-        handler: async (req: Request, res: Response) =>{ res.send("Hello Will!"); }
+        handler: async (req: Request, res: Response) =>{ res.send("Hello You're awesome!"); }
     }
 ]

@@ -11,9 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = [
     {
-        path: "/",
+        path: "/users",
         method: "get",
-        handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () { res.send("Hello Will!"); })
+        handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () { res.send("Hello You're awesome!"); })
     }
 ];
 //# sourceMappingURL=routes.js.map

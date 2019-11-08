@@ -25,5 +25,5 @@
     * httpErrors.ts (super err class construction and customization)
     * index.ts (custom type definitions)
 
-    - server.ts (main entry point, server port, unhandled rejections )
+  - server.ts (main entry point, server port, unhandled rejections )
 

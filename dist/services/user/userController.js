@@ -9,16 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const userController_1 = require("./userController");
-exports.default = [
-    {
-        path: "/users",
-        method: "get",
-        handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-            //you need to await the db poll before returning the results
-            const allUsers = yield userController_1.getAllUsers();
-            res.json(allUsers);
-        })
-    }
-];
-//# sourceMappingURL=routes.js.map
+const db_1 = require("../../utils/db");
+exports.getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.any('SELECT * FROM Users'); });
+//# sourceMappingURL=userController.js.map

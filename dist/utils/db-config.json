@@ -1,0 +1,6 @@
+{
+    "host": "localhost",
+    "port": 5432,
+    "database": "todo_rails_api_development",
+    "user": "postgres"
+}

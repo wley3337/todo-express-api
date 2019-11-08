@@ -25,7 +25,11 @@
     * ErrorHandler.ts (insert custom messages)
     * httpErrors.ts (super err class construction and customization)
     * index.ts (custom type definitions)
-    * db.ts (database setup and connections)
+    * db.ts (database setup and exports)
+    * db-config.json (database configuration)
 
   - server.ts (main entry point, server port, unhandled rejections )
 
+### Notes:
+
+  - clean up package.json and remove unused packages from other approaches (not sure if I need babel etc)

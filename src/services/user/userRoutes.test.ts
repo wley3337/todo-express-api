@@ -17,7 +17,7 @@ describe("User Routes", () =>{
     });
 
     test("returns route successfully", async() =>{
-        const response = await request(router).get("/user");
-        expect(response.text).toEqual("Hello You're awesome!");
+        const response = await request(router).get("/users");
+        expect(response.status).toEqual(200);
     })
 })

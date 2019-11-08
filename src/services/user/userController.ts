@@ -1,13 +1,4 @@
-import * as pgPromise from 'pg-promise';
-import dotenv from 'dotenv';
+import { db } from "../../utils/db";
 
 
-
-// const user = process.env.DB_USER
-// const password = process.env.DB_PASSWORD
-// const host = process.env.DB_HOST
-// const port = process.env.DB_PORT
-// const dbName = process.env.DB_DATABASE
-
-// const pgp = pgPromise();
-// const db = pgp(`postgres://${user}:${password}@${host}:${port}/${dbName}`);
+export const getAllUsers = async() => await db.any('SELECT * FROM Users');

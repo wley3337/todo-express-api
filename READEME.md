@@ -9,21 +9,23 @@
 
 ## Structure 
 * src
-  - middleware
+  - middleware/
     * common.ts (cors, compression, request parsing)
     * errorHandlers.ts (manages err outputs and logging(eventually))
     * index.ts (easy export)
 
-  - services (all models and their routes)
-    * model
-      - modelRoutes.ts
-      - modelController.ts
-      - modelXtype.test.ts
+  - services/ (all models and their routes)
+    * model/
+      - modelRoutes.ts (routes exported to index)
+      - modelController.ts (sql and database exchanges, logic for managing requests)
+      - modelXtype.test.ts (tests)
+    * index.ts (export of all routes)
 
-  - utils
+  - utils/
     * ErrorHandler.ts (insert custom messages)
     * httpErrors.ts (super err class construction and customization)
     * index.ts (custom type definitions)
+    * db.ts (database setup and connections)
 
   - server.ts (main entry point, server port, unhandled rejections )
 

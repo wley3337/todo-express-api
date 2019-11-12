@@ -64,8 +64,9 @@
         if false --> errors: { messages: ['Wrong Username or Password'] }
       } 
       ```
-  <strong>JWT Auth Routes:</strong>
-
+  <strong>- JWT Auth Routes -</strong>
+   
+  <strong>Must have: <span>&nbsp;&nbsp;</span> `"authorization": "Bearer *token*"`</strong>
   - GET `/user` 
       - auto login route for user with JWT Token
       - returns: 

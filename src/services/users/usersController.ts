@@ -6,6 +6,20 @@ import { getUserListsById } from "../lists/listsController";
 dotenv.config();
 // use: const key = process.env.SECRET_KEY
 
+// JWT USER_ID FROM TOKEN: res.locals.jwtPayload.user_id
+
+//   //The token is valid for 1 hour
+//   //We want to send a new token on every request
+//   const { userId, username } = jwtPayload;
+//   const newToken = jwt.sign({ userId, username }, config.jwtSecret, {
+//     expiresIn: "1h"
+//   });
+//   res.setHeader("token", newToken);
+
+//   //Call the next middleware or controller
+//   next();
+// };
+
 interface CreateUser{
     firstName: string
     lastName: string 
@@ -42,6 +56,8 @@ interface responseType{
 
 
 export const getAllUsers = async() => await db.any('SELECT * FROM Users');
+
+export const getUser = async(userId: number) => await db.one('SELECT * FROM users WHERE id = $1', userId)
 
 // create user -- username must be unique
 export const createUser = async(newUser: CreateUser) =>{

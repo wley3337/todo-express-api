@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const usersController_1 = require("./usersController");
+// JWT USER_ID FROM TOKEN: parseInt(res.locals.jwtPayload.user_id)
 const testUserCreate = {
     firstName: "testWill",
     lastName: "testLey",
@@ -25,6 +26,15 @@ const badUserLogin = {
     password: "12"
 };
 exports.default = [
+    {
+        path: "/users/show",
+        method: "get",
+        handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+            const userId = parseInt(res.locals.jwtPayload.user_id);
+            const allUsers = yield usersController_1.getUser(userId);
+            res.json(allUsers);
+        })
+    },
     {
         path: "/users",
         method: "get",

@@ -4,6 +4,7 @@ import { applyMiddleware, applyRoutes } from './utils';
 import middleware from './middleware';
 import routes from './services';
 import errorHandlers from "./middleware/errorHandlers";
+import { checkJWT } from "./middleware/jwt";
 
 process.on("uncaughtException", e =>{
     console.log(e);

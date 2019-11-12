@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { getAllUsers, createUser, loginUser } from './usersController';
+import { getAllUsers, createUser, loginUser, getUser } from './usersController';
+
+
+// JWT USER_ID FROM TOKEN: parseInt(res.locals.jwtPayload.user_id)
 
 const testUserCreate = {
     firstName: "testWill",
@@ -18,6 +21,15 @@ const badUserLogin = {
     password: "12"
 }
 export default[
+    {
+        path: "/users/show",
+        method: "get",
+        handler: async (req: Request, res: Response) =>{ 
+            const userId = parseInt(res.locals.jwtPayload.user_id);
+            const allUsers = await getUser(userId);
+            res.json(allUsers); 
+        }
+    },
     {
         path: "/users",
         method: "get",

@@ -33,6 +33,7 @@ dotenv_1.default.config();
 // created_at  
 // updated_at
 exports.getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.any('SELECT * FROM Users'); });
+exports.getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.one('SELECT * FROM users WHERE id = $1', userId); });
 // create user -- username must be unique
 exports.createUser = (newUser) => __awaiter(void 0, void 0, void 0, function* () {
     const newUsername = newUser.username;

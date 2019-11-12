@@ -6,6 +6,7 @@
 
 * [TypeScript references for PG-Promise](https://github.com/vitaly-t/pg-promise/tree/master/typescript)
 
+* [JWT Token design from this medium post](https://medium.com/javascript-in-plain-english/creating-a-rest-api-with-jwt-authentication-and-role-based-authorization-using-typescript-fbfa3cab22a4)
 
 ## Structure 
 * src

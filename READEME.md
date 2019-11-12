@@ -18,7 +18,7 @@
     * model/
       - modelRoutes.ts (routes exported to index)
       - modelController.ts (sql and database exchanges, logic for managing requests)
-      - modelXtype.test.ts (tests)
+      - modelXType.test.ts (tests)
     * index.ts (export of all routes)
 
   - utils/

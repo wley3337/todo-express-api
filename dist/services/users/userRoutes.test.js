@@ -17,7 +17,7 @@ const supertest_1 = __importDefault(require("supertest"));
 const utils_1 = require("../../utils");
 const middleware_1 = __importDefault(require("../../middleware"));
 const errorHandlers_1 = __importDefault(require("../../middleware/errorHandlers"));
-const routes_1 = __importDefault(require("../../services/user/routes"));
+const routes_1 = __importDefault(require("./routes"));
 describe("User Routes", () => {
     let router;
     beforeEach(() => {

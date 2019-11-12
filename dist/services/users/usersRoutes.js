@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const userController_1 = require("./userController");
+const usersController_1 = require("./usersController");
 const testUserCreate = {
     firstName: "testWill",
     lastName: "testLey",
@@ -26,22 +26,32 @@ const badUserLogin = {
 };
 exports.default = [
     {
+        path: "/users",
+        method: "get",
+        handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+            //you need to await the db poll before returning the results
+            // const allUsers = await getAllUsers();
+            const allUsers = yield usersController_1.getAllUsers();
+            res.json(allUsers);
+        })
+    },
+    {
         path: "/users/new",
         method: "post",
         handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //you need to await the db poll before returning the results
             // const allUsers = await getAllUsers();
-            const user = yield userController_1.createUser(testUserCreate);
+            const user = yield usersController_1.createUser(testUserCreate);
             res.json(user);
         })
     },
     {
         path: "/users",
-        method: "get",
+        method: "post",
         handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-            const user = yield userController_1.loginUser(testLoginUser);
+            const user = yield usersController_1.loginUser(req.body.user);
             res.json(user);
         })
     }
 ];
-//# sourceMappingURL=routes.js.map
+//# sourceMappingURL=usersRoutes.js.map

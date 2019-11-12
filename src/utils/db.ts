@@ -1,8 +1,10 @@
 import * as dbConfig from './db-config.json';
-// import * as promise from 'bluebird'; // promise managing library. May want to drop
 import pgPromise from 'pg-promise';
-import { IInitOptions, IDatabase, IMain } from 'pg-promise';
-import { promises } from 'dns';
+
+
+// import * as promise from 'bluebird'; // promise managing library. May want to drop
+// import { IInitOptions, IDatabase, IMain } from 'pg-promise';
+// import { promises } from 'dns';
 // import { *** potential defined functions from models ***} from '../services/model';
 
 // the majority of this file is from: https://github.com/vitaly-t/pg-promise-demo/blob/master/TypeScript/db/index.ts

@@ -17,13 +17,13 @@ const supertest_1 = __importDefault(require("supertest"));
 const utils_1 = require("../../utils");
 const middleware_1 = __importDefault(require("../../middleware"));
 const errorHandlers_1 = __importDefault(require("../../middleware/errorHandlers"));
-const routes_1 = __importDefault(require("../../services/user/routes"));
+const usersRoutes_1 = __importDefault(require("./usersRoutes"));
 describe("User Routes", () => {
     let router;
     beforeEach(() => {
         router = express_1.default();
         utils_1.applyMiddleware(middleware_1.default, router);
-        utils_1.applyRoutes(routes_1.default, router);
+        utils_1.applyRoutes(usersRoutes_1.default, router);
         utils_1.applyMiddleware(errorHandlers_1.default, router);
     });
     describe("POST /users", () => {
@@ -33,4 +33,4 @@ describe("User Routes", () => {
         }));
     });
 });
-//# sourceMappingURL=userRoutes.test.js.map
+//# sourceMappingURL=usersRoutes.test.js.map

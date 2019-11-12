@@ -22,6 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../../utils/db");
 const dotenv_1 = __importDefault(require("dotenv"));
 const bcrypt = __importStar(require("bcrypt"));
+const listsController_1 = require("../lists/listsController");
 dotenv_1.default.config();
 //schema:
 // id             
@@ -52,12 +53,13 @@ exports.createUser = (newUser) => __awaiter(void 0, void 0, void 0, function* ()
 exports.loginUser = (userToLogin) => __awaiter(void 0, void 0, void 0, function* () {
     const username = userToLogin.username;
     const password = userToLogin.password;
-    const userExists = yield db_1.db.one('SELECT * FROM Users WHERE username = $1', username);
-    if (userExists) {
-        const existingHash = userExists.password_digest;
+    const existingUser = yield db_1.db.one('SELECT * FROM Users WHERE username = $1', username);
+    if (existingUser) {
+        const existingHash = existingUser.password_digest;
         const authenticated = yield authenticatePassword(password, existingHash);
         if (authenticated.success) {
-            return { success: true, user: userExists, lists: [] };
+            const userLists = yield listsController_1.getUserListsById(existingUser.id);
+            return { success: true, user: existingUser, lists: userLists };
         }
         else {
             return { success: false, errors: { messages: "Wrong username or password" } };
@@ -79,4 +81,4 @@ const authenticatePassword = (password, hash) => __awaiter(void 0, void 0, void 
     });
     return response;
 });
-//# sourceMappingURL=userController.js.map
+//# sourceMappingURL=usersController.js.map

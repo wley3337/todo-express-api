@@ -11,8 +11,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dbConfig = __importStar(require("./db-config.json"));
-// import * as promise from 'bluebird'; // promise managing library. May want to drop
 const pg_promise_1 = __importDefault(require("pg-promise"));
+// import * as promise from 'bluebird'; // promise managing library. May want to drop
+// import { IInitOptions, IDatabase, IMain } from 'pg-promise';
+// import { promises } from 'dns';
 // import { *** potential defined functions from models ***} from '../services/model';
 // the majority of this file is from: https://github.com/vitaly-t/pg-promise-demo/blob/master/TypeScript/db/index.ts
 // pg-promise initialization options:  

@@ -16,20 +16,24 @@ export const checkJWT = (router: Router) =>{
             next();
         }else {
             const rawToken = <string>req.headers["authorization"];
-            const token = rawToken.split(" ")[1];
-            
-            const key:any = process.env.SECRET_KEY;
-            let jwtPayload;
-            try{
-               
-                jwtPayload = <any>jwt.verify(token, key);
-                res.locals.jwtPayload = jwtPayload;
-                console.log("jwt payload: ", res.locals.jwtPayload.user_id);
-            }catch(err){
+            if(rawToken){
+                const token = rawToken.split(" ")[1];
+                
+                const key:any = process.env.SECRET_KEY;
+                let jwtPayload;
+                try{
+                    jwtPayload = <any>jwt.verify(token, key);
+                    res.locals.jwtPayload = jwtPayload;
+                }
+                catch(err){
+                    res.status(401).send();
+                    return; 
+                }
+                next();
+            } else {
                 res.status(401).send();
-                return; 
+                return
             }
-            next();
 
         }
         }

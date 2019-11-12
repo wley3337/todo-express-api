@@ -24,19 +24,24 @@ exports.checkJWT = (router) => {
         }
         else {
             const rawToken = req.headers["authorization"];
-            const token = rawToken.split(" ")[1];
-            const key = process.env.SECRET_KEY;
-            let jwtPayload;
-            try {
-                jwtPayload = jwt.verify(token, key);
-                res.locals.jwtPayload = jwtPayload;
-                console.log("jwt payload: ", res.locals.jwtPayload.user_id);
+            if (rawToken) {
+                const token = rawToken.split(" ")[1];
+                const key = process.env.SECRET_KEY;
+                let jwtPayload;
+                try {
+                    jwtPayload = jwt.verify(token, key);
+                    res.locals.jwtPayload = jwtPayload;
+                }
+                catch (err) {
+                    res.status(401).send();
+                    return;
+                }
+                next();
             }
-            catch (err) {
+            else {
                 res.status(401).send();
                 return;
             }
-            next();
         }
     });
 };

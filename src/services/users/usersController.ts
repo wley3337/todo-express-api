@@ -2,6 +2,7 @@ import { db } from "../../utils/db";
 import dotenv from 'dotenv';
 import * as bcrypt from 'bcrypt';
 import { getUserListsById } from "../lists/listsController";
+import { generateJWT } from "../../middleware/jwt";
 
 dotenv.config();
 // use: const key = process.env.SECRET_KEY
@@ -87,23 +88,21 @@ export const loginUser = async (userToLogin: ExistingUserType) => {
     const username:string = userToLogin.username
     const password:string = userToLogin.password
     const existingUser:UserSchema = await db.one('SELECT * FROM Users WHERE username = $1', username)
-
     if(existingUser){
         const existingHash = existingUser.password_digest 
         const authenticated = await authenticatePassword( password, existingHash )
         if(authenticated.success){
-            const userLists = await getUserListsById(existingUser.id)
-            return { success: true, user: existingUser, lists: userLists };
+            const token = generateJWT({ user_id: existingUser.id });
+            const userLists = await getUserListsById(existingUser.id);
+            return { success: true,  user: { user: existingUser, lists: userLists}, token: token  };
         } else {
             return { success: false, errors: { messages: "Wrong username or password" } };
         }
     }
 }
-// get a user by jwt token
 
 
 //helper functions:
-
 const authenticatePassword = async (password:string, hash:string) =>{
   const response = await new Promise<responseType>( (resolve, reject) =>{
     bcrypt.compare( password, hash, function(err,res){

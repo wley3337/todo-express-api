@@ -28,27 +28,6 @@ const { PORT = 3000 } = process.env;
 const server = http.createServer(router);
 
 server.listen(PORT, () => console.log(`Server is running: http://localhost:${PORT}...`));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import bodyParser from "body-parser";
 // import dotenv from "dotenv";
 // import express from "express";

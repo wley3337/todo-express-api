@@ -51,7 +51,7 @@ export default[
         }
     },
     {
-        path: "/users",
+        path: "/login",
         method: "post",
         handler: async(req: Request, res: Response) =>{
             const user= await loginUser(req.body.user);

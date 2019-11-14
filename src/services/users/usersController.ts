@@ -42,12 +42,24 @@ password_digest:string // <-- ruby default salt value (cost) seems to be 12
 created_at: Date  
 updated_at: Date
 }
+
 interface responseType{
     success: boolean
     error?: any
 }
+
+interface bcryptHashResponseType{
+    success: boolean
+    passwordDigest?: string
+    error?: any
+}
+interface serializedUserType{
+    firstName: string
+    lastName: string
+    username: string
+}
 //schema:
-// id             
+// id
 // first_name 
 // last_name 
 // username 
@@ -62,20 +74,21 @@ export const getUser = async(userId: number) => await db.one('SELECT * FROM user
 
 // create user -- username must be unique
 export const createUser = async(newUser: CreateUser) =>{
-
     const newUsername = newUser.username;
-    const userExists:Array<UserSchema> = await db.any('SELECT * FROM Users WHERE username = $1', newUsername)
-
-
-    if(userExists.length > 0){
-    console.log('userExists: ', userExists);
-    const saltRounds = "12";
-    const hash = userExists[0].password_digest
-    let result = await authenticatePassword("12", hash)
-    
-    console.log("stuffds", result.success)
-    // const createdUser = await db.one('INSERT INTO users (first_name, last_name, username, password_digest), VALUES $1, $2, $3, $4',[newUser.firstName, newUser.lastName, newUser.username,] )
-
+    //check to see if the username is taken
+    const userExists:Array<UserSchema> = await db.any('SELECT * FROM users WHERE username = $1', newUsername);
+    if(userExists.length === 0){
+        const passwordDigestResponseObj = await createPasswordDigest(newUser.password);
+        if( passwordDigestResponseObj.success ){
+            const createdUser = await db.one('INSERT INTO users(first_name, last_name, username, password_digest, created_at, updated_at) VALUES($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *',[newUser.firstName, newUser.lastName, newUser.username, passwordDigestResponseObj.passwordDigest ] )
+            const token = generateJWT({ user_id: createdUser.id });
+            const user = serializeUser(createdUser)
+            return { success: true,  user: { user: user, lists: []}, token: token  };
+            
+        }else {
+            return { success: false, errors: { messages: ['An error occured creating your password']}}
+        }
+        
     } else {
         return {success: false, errors: {messages: ['Username is taken, please choose another.']}}
     }
@@ -94,15 +107,16 @@ export const loginUser = async (userToLogin: ExistingUserType) => {
         if(authenticated.success){
             const token = generateJWT({ user_id: existingUser.id });
             const userLists = await getUserListsById(existingUser.id);
-            return { success: true,  user: { user: existingUser, lists: userLists}, token: token  };
+            const user = serializeUser(existingUser)
+            return { success: true,  user: { user: user, lists: userLists}, token: token  };
         } else {
             return { success: false, errors: { messages: "Wrong username or password" } };
         }
     }
 }
 
-
 //helper functions:
+
 const authenticatePassword = async (password:string, hash:string) =>{
   const response = await new Promise<responseType>( (resolve, reject) =>{
     bcrypt.compare( password, hash, function(err,res){
@@ -116,4 +130,21 @@ const authenticatePassword = async (password:string, hash:string) =>{
 
   return response
 };
+
+const createPasswordDigest = async (password:string) =>{
+    const passwordDigestResponse = await new Promise<bcryptHashResponseType>( (resolve, reject) =>{
+        bcrypt.hash( password, 12, (err, hash) =>{
+            if(hash){
+                return resolve({ success: true, passwordDigest: hash })
+            } else {
+                return resolve({ success: false, error: err })
+            }
+        } )
+    });
+    return passwordDigestResponse;
+}
+
+const serializeUser =  (user: UserSchema): serializedUserType =>{
+    return {firstName: user.first_name, lastName: user.last_name, username: user.username }
+}
 

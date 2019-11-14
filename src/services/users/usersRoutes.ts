@@ -41,12 +41,12 @@ export default[
         }
     },
     {
-        path: "/users/new",
+        path: "/create-user",
         method: "post",
         handler: async (req: Request, res: Response) =>{ 
             //you need to await the db poll before returning the results
             // const allUsers = await getAllUsers();
-            const user = await createUser(testUserCreate)
+            const user = await createUser(req.body.user)
             res.json(user); 
         }
     },

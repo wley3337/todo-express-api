@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const usersController_1 = require("./usersController");
-// JWT USER_ID FROM TOKEN: parseInt(res.locals.jwtPayload.user_id)
 const testUserCreate = {
     firstName: "testWill",
     lastName: "testLey",
@@ -25,6 +24,7 @@ const badUserLogin = {
     username: "wley3337",
     password: "12"
 };
+// JWT USER_ID FROM TOKEN: parseInt(res.locals.jwtPayload.user_id)
 exports.default = [
     {
         path: "/users/show",
@@ -40,23 +40,20 @@ exports.default = [
         method: "get",
         handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //you need to await the db poll before returning the results
-            // const allUsers = await getAllUsers();
             const allUsers = yield usersController_1.getAllUsers();
             res.json(allUsers);
         })
     },
     {
-        path: "/users/new",
+        path: "/create-user",
         method: "post",
         handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-            //you need to await the db poll before returning the results
-            // const allUsers = await getAllUsers();
-            const user = yield usersController_1.createUser(testUserCreate);
+            const user = yield usersController_1.createUser(req.body.user);
             res.json(user);
         })
     },
     {
-        path: "/users",
+        path: "/login",
         method: "post",
         handler: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             const user = yield usersController_1.loginUser(req.body.user);

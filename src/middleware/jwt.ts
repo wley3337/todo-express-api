@@ -10,7 +10,7 @@ export const checkJWT = (router: Router) =>{
             const path = req.path;
             const method = req.method;
             //non-auth route for user sign-up or login
-            if(method === "POST" && (path === '/login' || path === '/users/new')){
+            if(method === "POST" && (path === '/login' || path === '/create-user')){
                 next();
             } else {
                 const rawToken = <string>req.headers["authorization"];

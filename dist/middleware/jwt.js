@@ -19,7 +19,7 @@ exports.checkJWT = (router) => {
         const path = req.path;
         const method = req.method;
         //non-auth route for user sign-up or login
-        if (method === "POST" && (path === '/users' || path === '/users/new')) {
+        if (method === "POST" && (path === '/login' || path === '/create-user')) {
             next();
         }
         else {
@@ -44,5 +44,10 @@ exports.checkJWT = (router) => {
             }
         }
     });
+};
+exports.generateJWT = (payload) => {
+    const key = process.env.SECRET_KEY;
+    const token = jwt.sign(payload, key); //<-- default is `HS256` which is what is used on Rails API as well
+    return token;
 };
 //# sourceMappingURL=jwt.js.map

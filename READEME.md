@@ -11,9 +11,10 @@
 ## Structure 
 * src
   - middleware/
-    * common.ts (cors, compression, request parsing)
+    * common.ts (imports: cors, compression, request parsing, jwt)
     * errorHandlers.ts (manages err outputs and logging(eventually))
     * index.ts (easy export)
+    * jwt.ts (jwt token creation and checking)
 
   - services/ (all models and their routes)
     * model/
@@ -45,7 +46,11 @@
       ``` 
       { 
         success: true/false,  
-          if true --> user: { :firstName, :lastName, :username, lists: [ :id, :heading, :toDos [ :id, :listId, :title, :description, :due ] ] } 
+          if true --> 
+          {  
+         user: { :firstName, :lastName, :username, lists: [ :id, :heading, :toDos [ :id, :listId, :title, :description, :due ] ] },
+         token: JWT token
+         } 
           if false --> errors: [ 'of error message strings' ]
         }
       ```
@@ -56,10 +61,12 @@
       { 
         success: true/false,  
         if true -->
+         {  
           user: { 
             :firstName, :lastName, :username, lists: [ :id, :heading, :toDos [ :id, :listId, :title, :description, :due ] ] 
           },
-          token: JWT token
+          token: JWT token 
+         }
 
         if false --> errors: { messages: ['Wrong Username or Password'] }
       } 
@@ -92,7 +99,20 @@
         if false --> errors: [ messages: [ 'error message strings' ] ]
       }
       ```
-      
+ 
+  - DELETE `/lists/:id` 
+      - destroy list  with  {list: { :id } } and destroy all dependents
+      - returns: 
+      ```
+      { 
+        success: true or false,  
+        if true --> 
+          lists: [ :id, :heading, :toDos [ :id, :listId, :title, :description, :due ] ]
+
+        if false --> errors: [ messages: [ 'List was not destroyed' ] ]
+      }
+      ```     
+
   - POST `/to_dos` 
       - creates a todo with { todo: { :listId, :title, :description?, :due? } }
       - returns: 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllUsers, createUser, loginUser } from './usersController';
+import { getAllUsers, createUser, loginUser, getUser } from './usersController';
 
 const testUserCreate = {
     firstName: "testWill",
@@ -17,7 +17,17 @@ const badUserLogin = {
     username: "wley3337",
     password: "12"
 }
+// JWT USER_ID FROM TOKEN: parseInt(res.locals.jwtPayload.user_id)
 export default[
+    {
+        path: "/users/show",
+        method: "get",
+        handler: async (req: Request, res: Response) =>{ 
+            const userId = parseInt(res.locals.jwtPayload.user_id);
+            const allUsers = await getUser(userId);
+            res.json(allUsers); 
+        }
+    },
     {
         path: "/users",
         method: "get",
@@ -28,17 +38,15 @@ export default[
         }
     },
     {
-        path: "/users/new",
+        path: "/create-user",
         method: "post",
         handler: async (req: Request, res: Response) =>{ 
-            //you need to await the db poll before returning the results
-            // const allUsers = await getAllUsers();
-            const user = await createUser(testUserCreate)
+            const user = await createUser(req.body.user);
             res.json(user); 
         }
     },
     {
-        path: "/users",
+        path: "/login",
         method: "post",
         handler: async(req: Request, res: Response) =>{
             const user= await loginUser(req.body.user);

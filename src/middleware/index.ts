@@ -3,6 +3,7 @@ import{
    handleCompression,
    handleCors 
 } from './common';
+import { checkJWT } from './jwt';
 
 
-export default [ handleBodyRequestParsing, handleCompression, handleCors];
+export default [ handleBodyRequestParsing, handleCompression, handleCors, checkJWT];

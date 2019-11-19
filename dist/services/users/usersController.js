@@ -23,9 +23,10 @@ const db_1 = require("../../utils/db");
 const dotenv_1 = __importDefault(require("dotenv"));
 const bcrypt = __importStar(require("bcrypt"));
 const listsController_1 = require("../lists/listsController");
+const jwt_1 = require("../../middleware/jwt");
 dotenv_1.default.config();
 //schema:
-// id             
+// id
 // first_name 
 // last_name 
 // username 
@@ -33,17 +34,23 @@ dotenv_1.default.config();
 // created_at  
 // updated_at
 exports.getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.any('SELECT * FROM Users'); });
+exports.getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.one('SELECT * FROM users WHERE id = $1', userId); });
 // create user -- username must be unique
 exports.createUser = (newUser) => __awaiter(void 0, void 0, void 0, function* () {
     const newUsername = newUser.username;
-    const userExists = yield db_1.db.any('SELECT * FROM Users WHERE username = $1', newUsername);
-    if (userExists.length > 0) {
-        console.log('userExists: ', userExists);
-        const saltRounds = "12";
-        const hash = userExists[0].password_digest;
-        let result = yield authenticatePassword("12", hash);
-        console.log("stuffds", result.success);
-        // const createdUser = await db.one('INSERT INTO users (first_name, last_name, username, password_digest), VALUES $1, $2, $3, $4',[newUser.firstName, newUser.lastName, newUser.username,] )
+    //check to see if the username is taken
+    const userExists = yield db_1.db.any('SELECT * FROM users WHERE username = $1', newUsername);
+    if (userExists.length === 0) {
+        const passwordDigestResponseObj = yield createPasswordDigest(newUser.password);
+        if (passwordDigestResponseObj.success) {
+            const createdUser = yield db_1.db.one('INSERT INTO users(first_name, last_name, username, password_digest, created_at, updated_at) VALUES($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *', [newUser.firstName, newUser.lastName, newUser.username, passwordDigestResponseObj.passwordDigest]);
+            const token = jwt_1.generateJWT({ user_id: createdUser.id });
+            const user = serializeUser(createdUser);
+            return { success: true, user: { user: user, lists: [] }, token: token };
+        }
+        else {
+            return { success: false, errors: { messages: ['An error occured creating your password'] } };
+        }
     }
     else {
         return { success: false, errors: { messages: ['Username is taken, please choose another.'] } };
@@ -58,15 +65,16 @@ exports.loginUser = (userToLogin) => __awaiter(void 0, void 0, void 0, function*
         const existingHash = existingUser.password_digest;
         const authenticated = yield authenticatePassword(password, existingHash);
         if (authenticated.success) {
+            const token = jwt_1.generateJWT({ user_id: existingUser.id });
             const userLists = yield listsController_1.getUserListsById(existingUser.id);
-            return { success: true, user: existingUser, lists: userLists };
+            const user = serializeUser(existingUser);
+            return { success: true, user: { user: user, lists: userLists }, token: token };
         }
         else {
             return { success: false, errors: { messages: "Wrong username or password" } };
         }
     }
 });
-// get a user by jwt token
 //helper functions:
 const authenticatePassword = (password, hash) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield new Promise((resolve, reject) => {
@@ -81,4 +89,20 @@ const authenticatePassword = (password, hash) => __awaiter(void 0, void 0, void 
     });
     return response;
 });
+const createPasswordDigest = (password) => __awaiter(void 0, void 0, void 0, function* () {
+    const passwordDigestResponse = yield new Promise((resolve, reject) => {
+        bcrypt.hash(password, 12, (err, hash) => {
+            if (hash) {
+                return resolve({ success: true, passwordDigest: hash });
+            }
+            else {
+                return resolve({ success: false, error: err });
+            }
+        });
+    });
+    return passwordDigestResponse;
+});
+const serializeUser = (user) => {
+    return { firstName: user.first_name, lastName: user.last_name, username: user.username };
+};
 //# sourceMappingURL=usersController.js.map

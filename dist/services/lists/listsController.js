@@ -26,4 +26,35 @@ const serializeList = (list) => __awaiter(void 0, void 0, void 0, function* () {
         toDos: listToDos
     };
 });
+//{ success: true, list: serializedList } 
+exports.createList = (list, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const createdList = yield db_1.db.one('INSERT INTO lists(heading, user_id, display_order, created_at, updated_at) VALUES($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *', [list.heading, userId, 0]);
+    if (createdList.id) {
+        const newSerializedList = yield serializeList(createdList);
+        console.log(newSerializedList);
+        return { success: true, list: newSerializedList };
+    }
+    else {
+        return { success: false, errors: { messages: "List did not save" } };
+    }
+});
+//{ success: true, list: serializedList }
+//not sure how to handle db errors here and if I'm creating a race condition with the db calls. 
+exports.deleteList = (listId) => __awaiter(void 0, void 0, void 0, function* () {
+    //get current list
+    const list = yield db_1.db.one('SELECT * FROM lists WHERE id = $1 LIMIT 1', listId);
+    if (list.id) {
+        //serialize list for return 
+        const listToReturn = yield serializeList(list);
+        //destroy all toDos associated with this list
+        listToReturn.toDos.forEach((toDo) => __awaiter(void 0, void 0, void 0, function* () { return yield toDosController_1.destroyToDoById(toDo.id); }));
+        //destroy list 
+        yield db_1.db.one('DELETE FROM lists WHERE id = $1 RETURNING id', listId);
+        //return
+        return { success: true, list: listToReturn };
+    }
+    else {
+        return { success: false, errors: { messages: "List did not delete" } };
+    }
+});
 //# sourceMappingURL=listsController.js.map

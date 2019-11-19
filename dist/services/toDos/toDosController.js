@@ -23,4 +23,8 @@ const serializeToDo = (toDo) => {
         due: toDo.due
     };
 };
+exports.destroyToDoById = (toDoId) => __awaiter(void 0, void 0, void 0, function* () {
+    yield db_1.db.one('DELETE FROM to_dos WHERE id = $1 RETURNING id', toDoId);
+    return true;
+});
 //# sourceMappingURL=toDosController.js.map

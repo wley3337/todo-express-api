@@ -38,7 +38,7 @@ exports.getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () { ret
 exports.getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield db_1.db.one('SELECT * FROM users WHERE id = $1', userId);
     if (user) {
-        const serializedUser = serializeUser(user);
+        const serializedUser = exports.serializeUser(user);
         const serializedLists = yield listsController_1.getUserListsById(user.id);
         return { success: true, user: { user: serializedUser, lists: serializedLists } };
     }
@@ -56,7 +56,7 @@ exports.createUser = (newUser) => __awaiter(void 0, void 0, void 0, function* ()
         if (passwordDigestResponseObj.success) {
             const createdUser = yield db_1.db.one('INSERT INTO users(first_name, last_name, username, password_digest, created_at, updated_at) VALUES($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *', [newUser.firstName, newUser.lastName, newUser.username, passwordDigestResponseObj.passwordDigest]);
             const token = jwt_1.generateJWT({ user_id: createdUser.id });
-            const user = serializeUser(createdUser);
+            const user = exports.serializeUser(createdUser);
             return { success: true, user: { user: user, lists: [] }, token: token };
         }
         else {
@@ -78,7 +78,7 @@ exports.loginUser = (userToLogin) => __awaiter(void 0, void 0, void 0, function*
         if (authenticated.success) {
             const token = jwt_1.generateJWT({ user_id: existingUser.id });
             const userLists = yield listsController_1.getUserListsById(existingUser.id);
-            const user = serializeUser(existingUser);
+            const user = exports.serializeUser(existingUser);
             return { success: true, user: { user: user, lists: userLists }, token: token };
         }
         else {
@@ -113,7 +113,7 @@ const createPasswordDigest = (password) => __awaiter(void 0, void 0, void 0, fun
     });
     return passwordDigestResponse;
 });
-const serializeUser = (user) => {
+exports.serializeUser = (user) => {
     return { firstName: user.first_name, lastName: user.last_name, username: user.username };
 };
 //# sourceMappingURL=usersController.js.map

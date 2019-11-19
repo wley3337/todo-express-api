@@ -34,3 +34,8 @@ const serializeToDo = (toDo: toDoSchemaType):SerializedToDo => {
         due: toDo.due 
     }
 }
+
+export const destroyToDoById = async (toDoId: number) =>{
+    await db.one('DELETE FROM to_dos WHERE id = $1 RETURNING id', toDoId)
+    return true 
+}

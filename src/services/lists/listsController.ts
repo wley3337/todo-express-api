@@ -1,5 +1,6 @@
 import { db } from '../../utils/db'
-import { getListToDos, SerializedToDo } from '../toDos/toDosController'
+import { getListToDos, SerializedToDo, destroyToDoById } from '../toDos/toDosController'
+import { serializeUser } from '../users/usersController'
 
 interface ListSchemaType{
     id: number
@@ -16,6 +17,10 @@ interface SerializedListType{
     toDos: Array<SerializedToDo>
 }
 
+interface CreateListType{
+    heading: string 
+}
+
 export const getUserListsById = async (userId: number) =>{
     const userLists: Array<ListSchemaType> = await db.any('SELECT * FROM lists WHERE user_id = $1', userId)
     //when mapping with async functions you need to wrap the map in a promise.all since each
@@ -30,5 +35,37 @@ const serializeList = async( list: ListSchemaType ):Promise<SerializedListType>=
         id: list.id,
         heading: list.heading,
         toDos: listToDos
+    }
+}
+
+//{ success: true, list: serializedList } 
+export const createList = async( list: CreateListType, userId: number ) =>{ 
+    const createdList:ListSchemaType = await db.one('INSERT INTO lists(heading, user_id, display_order, created_at, updated_at) VALUES($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *', [ list.heading, userId, 0 ] )
+
+    if(createdList.id ){
+        const newSerializedList = await serializeList(createdList)
+        console.log(newSerializedList)
+        return { success: true, list: newSerializedList }
+    } else {
+        return { success: false, errors: {messages: "List did not save"}}
+    }
+}
+
+//{ success: true, list: serializedList }
+//not sure how to handle db errors here and if I'm creating a race condition with the db calls. 
+export const deleteList = async( listId: number ) => {
+    //get current list
+    const list = await db.one('SELECT * FROM lists WHERE id = $1 LIMIT 1', listId);
+    if(list.id){
+        //serialize list for return 
+        const listToReturn = await serializeList(list)
+        //destroy all toDos associated with this list
+        listToReturn.toDos.forEach(async toDo => await destroyToDoById(toDo.id))
+        //destroy list 
+        await db.one('DELETE FROM lists WHERE id = $1 RETURNING id', listId)
+        //return
+        return { success: true, list: listToReturn }
+    } else {
+        return { success: false, errors: { messages: "List did not delete" }}
     }
 }

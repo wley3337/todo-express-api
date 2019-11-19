@@ -85,6 +85,7 @@ export const getUser = async(userId: number) => {
 
 
 
+
 // create user -- username must be unique
 export const createUser = async(newUser: CreateUser) =>{
     const newUsername = newUser.username;
@@ -157,7 +158,7 @@ const createPasswordDigest = async (password:string) =>{
     return passwordDigestResponse;
 }
 
-const serializeUser =  (user: UserSchema): serializedUserType =>{
+export const serializeUser =  (user: UserSchema): serializedUserType =>{
     return {firstName: user.first_name, lastName: user.last_name, username: user.username }
 }
 

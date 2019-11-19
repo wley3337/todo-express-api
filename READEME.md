@@ -39,7 +39,7 @@
   * <strong>Routes: </strong>
 
 
-   - POST `/create-user`
+   x POST `/create-user`
       - <strong>USERNAME is unique</strong>
       - create new user with { user: {:firstName, :lastName, :username, :password } }
       - returns:
@@ -54,7 +54,7 @@
           if false --> errors: [ 'of error message strings' ]
         }
       ```
-  - POST `/login` 
+  x POST `/login` 
       - login user with { user: { :username, :password } }
       - returns: 
       ```
@@ -74,7 +74,7 @@
   <strong>- JWT Auth Routes -</strong>
    
   <strong>Must have: <span>&nbsp;&nbsp;</span> `"authorization": "Bearer *token*"`</strong>
-  - GET `/user` 
+  x GET `/users/show` 
       - auto login route for user with JWT Token
       - returns: 
       ```
@@ -87,7 +87,7 @@
       }
       ```
 
-  - POST `/lists` 
+  x POST `/lists` 
       - create new list  with  {list: { :heading } }
       - returns: 
       ```
@@ -100,7 +100,7 @@
       }
       ```
  
-  - DELETE `/lists/:id` 
+  x DELETE `/lists/:id` 
       - destroy list  with  {list: { :id } } and destroy all dependents
       - returns: 
       ```

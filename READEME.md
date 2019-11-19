@@ -36,10 +36,10 @@
 
   * (done) clean up package.json and remove unused packages from other approaches (not sure if I need babel etc)
 
-  * <strong>Routes: </strong>
+  <strong>Routes: </strong>
 
 
-   x POST `/create-user`
+   - POST `/create-user`
       - <strong>USERNAME is unique</strong>
       - create new user with { user: {:firstName, :lastName, :username, :password } }
       - returns:
@@ -54,7 +54,7 @@
           if false --> errors: [ 'of error message strings' ]
         }
       ```
-  x POST `/login` 
+  - POST `/login` 
       - login user with { user: { :username, :password } }
       - returns: 
       ```
@@ -74,7 +74,7 @@
   <strong>- JWT Auth Routes -</strong>
    
   <strong>Must have: <span>&nbsp;&nbsp;</span> `"authorization": "Bearer *token*"`</strong>
-  x GET `/users/show` 
+  - GET `/users/show` 
       - auto login route for user with JWT Token
       - returns: 
       ```
@@ -87,7 +87,7 @@
       }
       ```
 
-  x POST `/lists` 
+  - POST `/lists` 
       - create new list  with  {list: { :heading } }
       - returns: 
       ```
@@ -100,7 +100,7 @@
       }
       ```
  
-  x DELETE `/lists/:id` 
+  - DELETE `/lists/:id` 
       - destroy list  with  {list: { :id } } and destroy all dependents
       - returns: 
       ```

@@ -19,9 +19,10 @@ exports.getUserListsById = (userId) => __awaiter(void 0, void 0, void 0, functio
     return Promise.all(userLists.map((list) => __awaiter(void 0, void 0, void 0, function* () { return yield serializeList(list); })));
 });
 const serializeList = (list) => __awaiter(void 0, void 0, void 0, function* () {
-    const listToDos = yield toDosController_1.getListToDos(list.id);
+    const listId = parseInt(list.id);
+    const listToDos = yield toDosController_1.getListToDos(listId);
     return {
-        id: list.id,
+        id: listId,
         heading: list.heading,
         toDos: listToDos
     };

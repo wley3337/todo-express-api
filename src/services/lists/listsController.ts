@@ -3,7 +3,7 @@ import { getListToDos, SerializedToDo, destroyToDoById } from '../toDos/toDosCon
 import { serializeUser } from '../users/usersController'
 
 interface ListSchemaType{
-    id: number
+    id: string
     user_id: number
     heading: string 
     display_order: number
@@ -30,9 +30,10 @@ export const getUserListsById = async (userId: number) =>{
 }
 
 const serializeList = async( list: ListSchemaType ):Promise<SerializedListType>=>{
-    const listToDos:Array<SerializedToDo> = await getListToDos(list.id)
+    const listId = parseInt(list.id)
+    const listToDos:Array<SerializedToDo> = await getListToDos(listId)
     return {
-        id: list.id,
+        id: listId,
         heading: list.heading,
         toDos: listToDos
     }

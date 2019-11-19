@@ -34,7 +34,18 @@ dotenv_1.default.config();
 // created_at  
 // updated_at
 exports.getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.any('SELECT * FROM Users'); });
-exports.getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () { return yield db_1.db.one('SELECT * FROM users WHERE id = $1', userId); });
+//returns {success: true, user: {user: serializedUser, lists: [serializedLists] } }
+exports.getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.db.one('SELECT * FROM users WHERE id = $1', userId);
+    if (user) {
+        const serializedUser = serializeUser(user);
+        const serializedLists = yield listsController_1.getUserListsById(user.id);
+        return { success: true, user: { user: serializedUser, lists: serializedLists } };
+    }
+    else {
+        return { success: false, errors: { messages: "Please login" } };
+    }
+});
 // create user -- username must be unique
 exports.createUser = (newUser) => __awaiter(void 0, void 0, void 0, function* () {
     const newUsername = newUser.username;
@@ -49,7 +60,7 @@ exports.createUser = (newUser) => __awaiter(void 0, void 0, void 0, function* ()
             return { success: true, user: { user: user, lists: [] }, token: token };
         }
         else {
-            return { success: false, errors: { messages: ['An error occured creating your password'] } };
+            return { success: false, errors: { messages: ['An error occurred creating your password'] } };
         }
     }
     else {

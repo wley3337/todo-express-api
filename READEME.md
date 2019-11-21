@@ -36,7 +36,7 @@
 
   * (done) clean up package.json and remove unused packages from other approaches (not sure if I need babel etc)
 
-  * <strong>Routes: </strong>
+  <strong>Routes: </strong>
 
 
    - POST `/create-user`
@@ -74,7 +74,7 @@
   <strong>- JWT Auth Routes -</strong>
    
   <strong>Must have: <span>&nbsp;&nbsp;</span> `"authorization": "Bearer *token*"`</strong>
-  - GET `/user` 
+  - GET `/users/show` 
       - auto login route for user with JWT Token
       - returns: 
       ```

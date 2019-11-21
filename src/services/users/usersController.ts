@@ -70,7 +70,21 @@ interface serializedUserType{
 
 export const getAllUsers = async() => await db.any('SELECT * FROM Users');
 
-export const getUser = async(userId: number) => await db.one('SELECT * FROM users WHERE id = $1', userId)
+//returns {success: true, user: {user: serializedUser, lists: [serializedLists] } }
+export const getUser = async(userId: number) => {
+    const user = await db.one('SELECT * FROM users WHERE id = $1', userId)
+    if(user){
+        const serializedUser = serializeUser(user)
+        const serializedLists = await getUserListsById(user.id)
+        return {success: true, user: {user: serializedUser , lists: serializedLists} }
+    }else {
+        return { success: false, errors: {messages: "Please login"} }
+    }
+}
+
+
+
+
 
 // create user -- username must be unique
 export const createUser = async(newUser: CreateUser) =>{
@@ -86,7 +100,7 @@ export const createUser = async(newUser: CreateUser) =>{
             return { success: true,  user: { user: user, lists: []}, token: token  };
             
         }else {
-            return { success: false, errors: { messages: ['An error occured creating your password']}}
+            return { success: false, errors: { messages: ['An error occurred creating your password']}}
         }
         
     } else {
@@ -144,7 +158,7 @@ export const createPasswordDigest = async (password:string) =>{
     return passwordDigestResponse;
 }
 
-const serializeUser =  (user: UserSchema): serializedUserType =>{
+export const serializeUser =  (user: UserSchema): serializedUserType =>{
     return {firstName: user.first_name, lastName: user.last_name, username: user.username }
 }
 

@@ -131,7 +131,7 @@ const authenticatePassword = async (password:string, hash:string) =>{
   return response
 };
 
-const createPasswordDigest = async (password:string) =>{
+export const createPasswordDigest = async (password:string) =>{
     const passwordDigestResponse = await new Promise<bcryptHashResponseType>( (resolve, reject) =>{
         bcrypt.hash( password, 12, (err, hash) =>{
             if(hash){

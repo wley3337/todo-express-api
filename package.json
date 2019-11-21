@@ -36,10 +36,10 @@
   "scripts": {
     "start": "node .",
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
-    "test": "jest --coverage --verbose"
+    "test": "jest --coverage"
   },
   "jest": {
-    "verbose": true,
+    "verbose": false,
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },

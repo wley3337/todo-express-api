@@ -21,7 +21,7 @@ dotenv.config();
 //   next();
 // };
 
-interface CreateUser{
+export interface CreateUser{
     firstName: string
     lastName: string 
     username: string 
@@ -33,7 +33,7 @@ interface ExistingUserType{
     password: string 
 }
 
-interface UserSchema{
+export interface UserSchema{
 id: number
 first_name : string
 last_name:string 

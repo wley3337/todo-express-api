@@ -39,7 +39,6 @@
     "test": "jest --coverage"
   },
   "jest": {
-    "verbose": false,
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },

@@ -34,7 +34,7 @@ export default[
         handler: async (req: Request, res: Response) =>{ 
             //you need to await the db poll before returning the results
             const allUsers = await getAllUsers();
-            res.json(allUsers); 
+            res.json({allUsers: allUsers}); 
         }
     },
     {

@@ -78,7 +78,7 @@ export const getUser = async(userId: number) => {
         const serializedLists = await getUserListsById(user.id)
         return {success: true, user: {user: serializedUser , lists: serializedLists} }
     }else {
-        return { success: false, errors: {messages: "Please login"} }
+        return { success: false, errors: {messages: ["Please login"]} }
     }
 }
 

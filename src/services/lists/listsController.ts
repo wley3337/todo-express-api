@@ -2,7 +2,7 @@ import { db } from '../../utils/db'
 import { getListToDos, SerializedToDo, destroyToDoById } from '../toDos/toDosController'
 import { serializeUser } from '../users/usersController'
 
-interface ListSchemaType{
+export interface ListSchemaType{
     id: string
     user_id: number
     heading: string 

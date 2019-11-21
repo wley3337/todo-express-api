@@ -11,7 +11,7 @@ export interface ListSchemaType{
     updated_at: Date
 }
 
-interface SerializedListType{
+export interface SerializedListType{
     id: number 
     heading: string 
     toDos: Array<SerializedToDo>
@@ -45,7 +45,6 @@ export const createList = async( list: CreateListType, userId: number ) =>{
 
     if(createdList.id ){
         const newSerializedList = await serializeList(createdList)
-        console.log(newSerializedList)
         return { success: true, list: newSerializedList }
     } else {
         return { success: false, errors: {messages: "List did not save"}}
@@ -63,7 +62,7 @@ export const deleteList = async( listId: number ) => {
         //destroy all toDos associated with this list
         listToReturn.toDos.forEach(async toDo => await destroyToDoById(toDo.id))
         //destroy list 
-        await db.one('DELETE FROM lists WHERE id = $1 RETURNING id', listId)
+        await db.one('DELETE FROM lists WHERE id = $1 RETURNING *', listId)
         //return
         return { success: true, list: listToReturn }
     } else {

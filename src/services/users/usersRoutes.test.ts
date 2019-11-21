@@ -14,6 +14,7 @@ describe("User Routes", () =>{
     let testUser:UserSchema;
 
     beforeAll( async()=>{
+        await db.any('DELETE FROM users');
         const passwordDigestResponseObj = await createPasswordDigest('123');
         testUser = await db.one('INSERT INTO users(first_name, last_name, username, password_digest, created_at, updated_at) VALUES($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *', ['testFirstName', 'testLastName', 'test123', passwordDigestResponseObj.passwordDigest ]);
     });
@@ -63,7 +64,7 @@ describe("User Routes", () =>{
             const createUserBadUsername = {user: { firstName: 'testFN2', lastName: 'testLN2', username: 'test123', password: '123'}}
             const response = await request(router).post("/create-user").send(createUserBadUsername);
             expect(response.status).toEqual(200);
-           expect(response.body.errors.messages[0]).toEqual('Username is taken, please choose another.'); 
+           expect(response.body.success).toBeFalsy;
         });
     })
     describe("POST /login", ()=>{

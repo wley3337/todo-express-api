@@ -1,20 +1,26 @@
 {
-  "development": {
+  "dev": {
+    "driver": "pg",
     "host": "localhost",
     "port": 5432,
     "database": "todo_rails_api_development",
-    "user": "postgres"
+    "user": "postgres",
+    "multipleStatements": true
   },
   "test": {
+    "driver": "pg",
     "host": "localhost",
     "port": 5432,
     "database": "todo_rails_api_test",
-    "user": "postgres"
-  }, 
-  "production": {
+    "user": "postgres",
+    "multipleStatements": true
+  },
+  "prod": {
+    "driver": "pg",
     "host": "localhost",
     "port": 5432,
     "database": "todo_rails_api_development",
-    "user": "postgres"
-  } 
+    "user": "postgres",
+    "multipleStatements": true
+  }
 }

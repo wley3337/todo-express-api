@@ -1,0 +1,20 @@
+{
+    "development": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "todo_rails_api_development",
+        "user": "postgres"
+    },
+    "test": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "todo_rails_api_test",
+        "user": "postgres"
+    },
+    "production": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "todo_rails_api_development",
+        "user": "postgres"
+    }
+}
